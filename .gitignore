@@ -9,4 +9,5 @@ spotify_appkey.key
 *.save
 *.*~
 build/
+artifacts/
 .vscode/
