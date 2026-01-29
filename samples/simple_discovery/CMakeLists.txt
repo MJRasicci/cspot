@@ -17,7 +17,7 @@ if (NOT TARGET librespot::cspot)
   find_package(cspot REQUIRED)
 endif()
 
-add_executable(simple_discovery src/connect_playback.c)
+add_executable(simple_discovery src/simple_discovery.c)
 if (TARGET cspot_prebuild)
   add_dependencies(simple_discovery cspot_prebuild)
 endif()

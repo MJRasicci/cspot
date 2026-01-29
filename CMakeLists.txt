@@ -9,6 +9,7 @@ set(CSPOT_INSTALL_SAMPLES_DIR "samples")
 
 set(CSPOT_CARGO_TARGET_DIR "${CMAKE_CURRENT_LIST_DIR}/artifacts/target")
 add_subdirectory(c-bindings)
+add_subdirectory(samples/simple_discovery)
 add_subdirectory(samples/connect_playback)
 
 include(CPack)
