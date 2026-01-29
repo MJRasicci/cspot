@@ -68,6 +68,7 @@ add_custom_command(
   WORKING_DIRECTORY "${CSPOT_SOURCE_DIR}"
   COMMENT "Generating cspot header and building libcspot"
   VERBATIM
+  USES_TERMINAL
 )
 add_custom_target(cspot_prebuild DEPENDS
   "${CSPOT_INCLUDE_DIR}/cspot.h"
