@@ -1,5 +1,5 @@
 /*
-// TODO: This is the rust connect playback example, we want to rewrite this sample to use our c-bindings.
+// TODO: This is the rust connect playback example, we want to rewrite this to use our c-bindings.
 
 use librespot::{
     connect::{ConnectConfig, LoadRequest, LoadRequestOptions, Spirc},
@@ -80,14 +80,9 @@ async fn main() -> Result<(), Error> {
 }
 */
 
-#include <inttypes.h>
-#include <stdio.h>
-
 #include "cspot.h"
 
 int main(void)
 {
-    uint32_t marker = cspot_placeholder();
-    printf("cspot placeholder: 0x%08" PRIx32 "\n", marker);
     return 0;
 }

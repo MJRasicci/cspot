@@ -1,5 +1,5 @@
 /*
-// TODO: This is the rust discovery example, we want to rewrite this sample to use our c-bindings.
+// TODO: This is the rust discovery example, we want to rewrite this to use our c-bindings.
 
 use futures::StreamExt;
 use librespot_core::SessionConfig;
@@ -23,6 +23,8 @@ async fn main() {
     }
 }
 */
+
+#include "cspot.h"
 
 int main()
 {
