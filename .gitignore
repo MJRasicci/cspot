@@ -1,13 +1,2 @@
-target
-.cargo
-spotify_appkey.key
-.idea/
-.vagrant/
-.project
-.history
-.cache
-*.save
-*.*~
-build/
 artifacts/
 .vscode/
