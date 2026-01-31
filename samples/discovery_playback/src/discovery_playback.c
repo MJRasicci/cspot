@@ -38,6 +38,11 @@ int main(int argc, char **argv)
     cspot_load_request_options_t *load_options = NULL;
     int exit_code = 0;
 
+    if (!cspot_log_init(NULL, &error)) {
+        report_error("failed to initialize logging", error);
+        error = NULL;
+    }
+
     if (argc > 2) {
         print_usage(argv[0]);
         return 1;

@@ -16,6 +16,11 @@ int main(void)
     const char *name = "Librespot";
     cspot_error_t *error = NULL;
 
+    if (!cspot_log_init(NULL, &error)) {
+        report_error("failed to initialize logging", error);
+        error = NULL;
+    }
+
     char *device_id = cspot_device_id_from_name(name, &error);
     if (!device_id) {
         return report_error("failed to compute device id", error);

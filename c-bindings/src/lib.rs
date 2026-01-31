@@ -3,6 +3,7 @@
 mod discovery;
 mod error;
 mod ffi;
+mod logging;
 mod connect;
 mod playback;
 mod runtime;

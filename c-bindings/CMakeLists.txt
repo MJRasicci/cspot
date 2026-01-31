@@ -57,6 +57,16 @@ set(CSPOT_STATIC_LIBRARY_OUTPUT
   "${CSPOT_CARGO_TARGET_DIR}/${CSPOT_CARGO_PROFILE}/${CMAKE_STATIC_LIBRARY_PREFIX}cspot${CMAKE_STATIC_LIBRARY_SUFFIX}"
 )
 
+file(GLOB_RECURSE CSPOT_RUST_SOURCES CONFIGURE_DEPENDS
+  "${CSPOT_SOURCE_DIR}/src/*.rs"
+)
+set(CSPOT_HEADER_DEPENDS
+  "${CSPOT_SOURCE_DIR}/Cargo.toml"
+  "${CSPOT_SOURCE_DIR}/Cargo.lock"
+  "${CSPOT_SOURCE_DIR}/cbindgen.toml"
+  ${CSPOT_RUST_SOURCES}
+)
+
 add_custom_command(
   OUTPUT
     "${CSPOT_INCLUDE_DIR}/cspot.h"
@@ -65,6 +75,7 @@ add_custom_command(
   COMMAND "${CMAKE_COMMAND}" -E make_directory "${CSPOT_INCLUDE_DIR}"
   COMMAND "${CBINDGEN_EXECUTABLE}" --config "${CSPOT_SOURCE_DIR}/cbindgen.toml" --crate cspot --output "${CSPOT_INCLUDE_DIR}/cspot.h"
   COMMAND ${CSPOT_CARGO_BUILD_CMD}
+  DEPENDS ${CSPOT_HEADER_DEPENDS}
   WORKING_DIRECTORY "${CSPOT_SOURCE_DIR}"
   COMMENT "Generating cspot header and building libcspot"
   VERBATIM
