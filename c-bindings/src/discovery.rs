@@ -1,4 +1,4 @@
-use std::ffi::{CStr, CString};
+use std::ffi::CString;
 use std::os::raw::c_char;
 use std::panic::AssertUnwindSafe;
 use std::ptr;
@@ -13,6 +13,7 @@ use librespot::discovery::{Credentials, DeviceType, Discovery};
 use librespot::protocol::authentication::AuthenticationType;
 
 use crate::error::{clear_error, cspot_error_t, cstring_from_str_lossy, write_error};
+use crate::ffi::read_cstr;
 use crate::runtime::runtime;
 
 /// Opaque discovery handle for C callers.
@@ -131,20 +132,6 @@ impl CredentialsHandle {
             username,
         }
     }
-}
-
-fn read_cstr(
-    value: *const c_char,
-    field: &'static str,
-    out_error: *mut *mut cspot_error_t,
-) -> Option<String> {
-    if value.is_null() {
-        write_error(out_error, format!("{field} was null"));
-        return None;
-    }
-    // Safety: caller guarantees a valid, NUL-terminated C string.
-    let cstr = unsafe { CStr::from_ptr(value) };
-    Some(cstr.to_string_lossy().into_owned())
 }
 
 static DEFAULT_CLIENT_ID: Lazy<CString> = Lazy::new(|| {
@@ -386,4 +373,15 @@ pub extern "C" fn cspot_auth_type_name(value: cspot_auth_type_t) -> *const c_cha
         }
         cspot_auth_type_t::CSPOT_AUTH_TYPE_INVALID => b"INVALID\0".as_ptr() as *const c_char,
     }
+}
+
+pub(crate) fn credentials_from_handle(
+    credentials: *const cspot_credentials_t,
+) -> Option<Credentials> {
+    if credentials.is_null() {
+        return None;
+    }
+    // Safety: credentials must be a valid handle allocated by cspot.
+    let handle = unsafe { &*(credentials as *const CredentialsHandle) };
+    Some(handle.credentials.clone())
 }
