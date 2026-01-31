@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(connect_playback C)
+project(discovery_playback C)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -17,10 +17,10 @@ if (NOT TARGET librespot::cspot)
   find_package(cspot REQUIRED)
 endif()
 
-add_executable(connect_playback src/connect_playback.c)
+add_executable(discovery_playback src/discovery_playback.c)
 if (TARGET cspot_prebuild)
-  add_dependencies(connect_playback cspot_prebuild)
+  add_dependencies(discovery_playback cspot_prebuild)
 endif()
-target_link_libraries(connect_playback PRIVATE librespot::cspot m ssl crypto)
+target_link_libraries(discovery_playback PRIVATE librespot::cspot m ssl crypto)
 
-install(TARGETS connect_playback RUNTIME DESTINATION "${CSPOT_INSTALL_SAMPLES_DIR}")
+install(TARGETS discovery_playback RUNTIME DESTINATION "${CSPOT_INSTALL_SAMPLES_DIR}")
