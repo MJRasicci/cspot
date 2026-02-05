@@ -1,4 +1,4 @@
-name: Build, Test & Release
+name: Build & Release
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ env:
 
 jobs:
   build-test:
-    name: Build & Test (${{ matrix.os }})
+    name: Build (${{ matrix.os }})
     if: github.event_name != 'release'
     runs-on: ${{ matrix.os }}
     strategy:
