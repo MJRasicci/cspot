@@ -11,7 +11,7 @@ name = "cspot"
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [features]
-default = ["with-libmdns", "native-tls"]
+default = ["with-libmdns", "native-tls", "rodio-backend"]
 
 # Propagate TLS/discovery/audio passthrough options down to librespot
 native-tls = ["librespot/native-tls"]
@@ -21,6 +21,14 @@ with-libmdns = ["librespot/with-libmdns"]
 with-avahi = ["librespot/with-avahi"]
 with-dns-sd = ["librespot/with-dns-sd"]
 passthrough-decoder = ["librespot/passthrough-decoder"]
+rodio-backend = ["librespot/rodio-backend"]
+rodiojack-backend = ["librespot/rodiojack-backend"]
+gstreamer-backend = ["librespot/gstreamer-backend"]
+portaudio-backend = ["librespot/portaudio-backend"]
+sdl-backend = ["librespot/sdl-backend"]
+alsa-backend = ["librespot/alsa-backend"]
+pulseaudio-backend = ["librespot/pulseaudio-backend"]
+jackaudio-backend = ["librespot/jackaudio-backend"]
 
 [dependencies]
 librespot = { path = "../librespot", default-features = false }

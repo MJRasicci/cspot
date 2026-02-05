@@ -91,4 +91,5 @@ The install tree mirrors the package layout.
 
 - CMake presets are defined in `CMakePresets.json` at the repo root.
 - Build outputs go under `artifacts/` by default.
+- The cspot crate enables librespot's `rodio-backend` by default; disable it or swap backends via Cargo features if you need a different audio output path.
 - If you need a different compiler or generator, add a new preset instead of editing build scripts.
