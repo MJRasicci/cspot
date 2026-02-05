@@ -1,0 +1,127 @@
+name: Build, Test & Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+  release:
+    types: [ published ]
+
+concurrency:
+  group: cspot-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CSPOT_CBINDGEN_VERSION: "0.27.0"
+
+jobs:
+  build-test:
+    name: Build & Test (${{ matrix.os }})
+    if: github.event_name != 'release'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            preset: linux-x64-debug
+          - os: windows-latest
+            preset: windows-x64-debug
+          - os: macos-latest
+            preset: macos-arm64-debug
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: ./scripts/setup.sh
+
+      - name: Setup (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\scripts\setup.cmd
+
+      - name: Build & Test (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: cmake --workflow --preset "${{ matrix.preset }}"
+
+      - name: Build & Test (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: cmake --workflow --preset "${{ matrix.preset }}"
+
+  package:
+    name: Package (${{ matrix.os }})
+    if: github.event_name == 'release'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            preset: linux-x64-release
+            artifact: linux-x64
+          - os: windows-latest
+            preset: windows-x64-release
+            artifact: windows-x64
+          - os: macos-latest
+            preset: macos-arm64-release
+            artifact: macos-arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: ./scripts/setup.sh
+
+      - name: Setup (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\scripts\setup.cmd
+
+      - name: Build, Test & Package (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: cmake --workflow --preset "${{ matrix.preset }}"
+
+      - name: Build, Test & Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: cmake --workflow --preset "${{ matrix.preset }}"
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cspot-${{ matrix.artifact }}
+          path: artifacts/pack/*
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish Release Assets
+    if: github.event_name == 'release'
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Packages
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/**/*
+          fail_on_unmatched_files: true
