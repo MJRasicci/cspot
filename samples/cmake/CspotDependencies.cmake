@@ -1,5 +1,61 @@
 include_guard(GLOBAL)
 
+function(cspot_uses_static_library out_var)
+  if (NOT TARGET librespot::cspot)
+    set(${out_var} OFF PARENT_SCOPE)
+    return()
+  endif()
+
+  get_target_property(_cspot_is_static_prop librespot::cspot CSPOT_IS_STATIC)
+  if (NOT _cspot_is_static_prop STREQUAL "_cspot_is_static_prop-NOTFOUND")
+    if (_cspot_is_static_prop)
+      set(${out_var} ON PARENT_SCOPE)
+    else()
+      set(${out_var} OFF PARENT_SCOPE)
+    endif()
+    return()
+  endif()
+
+  get_target_property(_cspot_type librespot::cspot TYPE)
+  if (_cspot_type STREQUAL "STATIC_LIBRARY")
+    set(${out_var} ON PARENT_SCOPE)
+    return()
+  endif()
+
+  if (_cspot_type STREQUAL "UNKNOWN_LIBRARY")
+    get_target_property(_cspot_import_lib librespot::cspot IMPORTED_IMPLIB)
+    if (_cspot_import_lib)
+      set(${out_var} OFF PARENT_SCOPE)
+      return()
+    endif()
+
+    get_target_property(_cspot_location librespot::cspot IMPORTED_LOCATION)
+    if (NOT _cspot_location STREQUAL "_cspot_location-NOTFOUND")
+      get_filename_component(_cspot_library_name "${_cspot_location}" NAME)
+      string(TOLOWER "${_cspot_library_name}" _cspot_library_name_lower)
+
+      if (WIN32 AND _cspot_library_name_lower MATCHES "\\.dll\\.lib$")
+        set(${out_var} OFF PARENT_SCOPE)
+        return()
+      endif()
+
+      get_filename_component(_cspot_library_ext "${_cspot_location}" EXT)
+      string(TOLOWER "${_cspot_library_ext}" _cspot_library_ext_lower)
+      if (_cspot_library_ext_lower STREQUAL ".a")
+        set(${out_var} ON PARENT_SCOPE)
+        return()
+      endif()
+
+      if (WIN32 AND _cspot_library_ext_lower STREQUAL ".lib")
+        set(${out_var} ON PARENT_SCOPE)
+        return()
+      endif()
+    endif()
+  endif()
+
+  set(${out_var} OFF PARENT_SCOPE)
+endfunction()
+
 function(cspot_link_common_deps target)
   if (NOT TARGET ${target})
     message(FATAL_ERROR "cspot_link_common_deps: target '${target}' does not exist")
@@ -44,7 +100,20 @@ function(cspot_link_platform_audio target)
       ${CSPOT_IOKIT_FRAMEWORK}
     )
   elseif (WIN32)
-    target_link_libraries(${target} PRIVATE ole32 avrt uuid winmm)
+    cspot_uses_static_library(_cspot_is_static)
+    if (_cspot_is_static)
+      target_link_libraries(
+        ${target}
+        PRIVATE
+        ole32
+        avrt
+        uuid
+        winmm
+        iphlpapi
+        propsys
+        ntdll
+      )
+    endif()
   endif()
 endfunction()
 

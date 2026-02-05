@@ -47,10 +47,27 @@ find_package_handle_standard_args(cspot
 )
 
 if (cspot_FOUND)
+  set(_cspot_is_static OFF)
+  get_filename_component(_cspot_library_name "${cspot_LIBRARY}" NAME)
+  string(TOLOWER "${_cspot_library_name}" _cspot_library_name_lower)
+
+  if (WIN32)
+    if (_cspot_library_name_lower MATCHES "\\.lib$" AND NOT _cspot_library_name_lower MATCHES "\\.dll\\.lib$")
+      set(_cspot_is_static ON)
+    endif()
+  else()
+    get_filename_component(_cspot_library_ext "${cspot_LIBRARY}" EXT)
+    string(TOLOWER "${_cspot_library_ext}" _cspot_library_ext_lower)
+    if (_cspot_library_ext_lower STREQUAL ".a")
+      set(_cspot_is_static ON)
+    endif()
+  endif()
+
   add_library(librespot::cspot UNKNOWN IMPORTED)
   set_target_properties(librespot::cspot PROPERTIES
     IMPORTED_LOCATION "${cspot_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${cspot_INCLUDE_DIR}"
+    CSPOT_IS_STATIC "${_cspot_is_static}"
   )
 endif()
 
