@@ -9,6 +9,25 @@ librespot is included as a git submodule.
 - `c-bindings/`: the Rust crate that exports the C ABI, plus cbindgen config for `cspot.h`.
 - `samples/`: C examples that link against the cspot library.
 - `artifacts/`: build outputs (configured by CMake presets).
+- `scripts/setup/`: OS-specific setup scripts for containers, workstations, and CI agents.
+
+## Setup scripts
+
+From the repository root directory, run the following command depending on your platform to bootstrap a new machine (or container) with the required toolchains and native libraries:
+
+Linux or macOS:
+
+```sh
+./scripts/setup.sh
+```
+
+Windows:
+
+```bat
+.\scripts\setup.cmd
+```
+
+The scripts install Rust (via rustup), cbindgen, CMake, Ninja, and a compiler toolchain. On Linux they also install minimal librespot native deps (OpenSSL + ALSA for the rodio backend). See `scripts/setup/README.md` for details.
 
 ## Build from Source
 
