@@ -1,5 +1,10 @@
 # cspot: C bindings for librespot
 
+<!-- PROJECT SHIELDS -->
+[![Build Status][build-shield]][build-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
 cspot provides C bindings for the [librespot](https://github.com/librespot-org/librespot) library so C and C++ applications can act as Spotify Connect clients. The project exposes a small C API, ships a generated `cspot.h`, and includes sample applications that link against the bindings.
 
 librespot is included as a git submodule.
@@ -112,3 +117,10 @@ The install tree mirrors the package layout.
 - Build outputs go under `artifacts/` by default.
 - The cspot crate enables librespot's `rodio-backend` by default; disable it or swap backends via Cargo features if you need a different audio output path.
 - If you need a different compiler or generator, add a new preset instead of editing build scripts.
+
+[build-shield]: https://img.shields.io/github/actions/workflow/status/mjrasicci/cspot/build.yml?branch=main&logo=github&style=for-the-badge
+[build-url]: https://github.com/mjrasicci/cspot/actions/workflows/build.yml
+[issues-shield]: https://img.shields.io/github/issues/mjrasicci/cspot.svg?logo=github&style=for-the-badge
+[issues-url]: https://github.com/mjrasicci/cspot/issues
+[license-shield]: https://img.shields.io/github/license/mjrasicci/cspot.svg?style=for-the-badge
+[license-url]: https://github.com/mjrasicci/cspot/blob/main/LICENSE.txt
