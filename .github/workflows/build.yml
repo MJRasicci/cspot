@@ -41,10 +41,20 @@ jobs:
         shell: bash
         run: ./scripts/setup.sh
 
-      - name: Setup (Windows)
+      - name: Setup MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Setup Rust (Windows)
+        if: runner.os == 'Windows'
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cbindgen (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: .\scripts\setup.cmd
+        run: cargo install cbindgen --version $env:CSPOT_CBINDGEN_VERSION
 
       - name: Build & Test (Unix)
         if: runner.os != 'Windows'
@@ -84,10 +94,20 @@ jobs:
         shell: bash
         run: ./scripts/setup.sh
 
-      - name: Setup (Windows)
+      - name: Setup MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Setup Rust (Windows)
+        if: runner.os == 'Windows'
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cbindgen (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: .\scripts\setup.cmd
+        run: cargo install cbindgen --version $env:CSPOT_CBINDGEN_VERSION
 
       - name: Build, Test & Package (Unix)
         if: runner.os != 'Windows'
