@@ -19,7 +19,7 @@ This repo builds **cspot**, a C ABI wrapper around the Rust **librespot** librar
 
 ## Build & packaging expectations
 
-- CMake is the primary workflow. Presets and workflows should remain first-class. You can build the project using `cmake --workflow --preset linux-x64-debug`. This will run cbindgen to generate the cspot header, cargo to build libcspot, and gcc to build the sample projects.
+- CMake is the primary workflow. Presets and workflows should remain first-class. You can build the project using `cmake --workflow --preset {os}-{arch}-debug` where os is windows, macos, or linux and arch is x64 or arm64. This will run cbindgen to generate the cspot header, cargo to build libcspot, and your C compiler to build the sample projects.
 - Build outputs must stay under `artifacts/`.
 - Packaging should produce `include/`, `lib/`, and `samples/` in the final bundle.
 - You should always build the project using the cmake workflow after any code changes to ensure your output compiles.
