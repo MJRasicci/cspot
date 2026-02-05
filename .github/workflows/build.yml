@@ -14,6 +14,7 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
+  CSPOT_CBINDGEN_VERSION: "0.29.2"
 
 jobs:
   build-test:

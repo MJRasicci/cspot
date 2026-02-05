@@ -30,12 +30,18 @@ function(cspot_link_platform_audio target)
     find_library(CSPOT_COREAUDIO_FRAMEWORK CoreAudio REQUIRED)
     find_library(CSPOT_AUDIOTOOLBOX_FRAMEWORK AudioToolbox REQUIRED)
     find_library(CSPOT_COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+    find_library(CSPOT_SECURITY_FRAMEWORK Security REQUIRED)
+    find_library(CSPOT_SYSTEMCONFIGURATION_FRAMEWORK SystemConfiguration REQUIRED)
+    find_library(CSPOT_IOKIT_FRAMEWORK IOKit REQUIRED)
     target_link_libraries(
       ${target}
       PRIVATE
       ${CSPOT_COREAUDIO_FRAMEWORK}
       ${CSPOT_AUDIOTOOLBOX_FRAMEWORK}
       ${CSPOT_COREFOUNDATION_FRAMEWORK}
+      ${CSPOT_SECURITY_FRAMEWORK}
+      ${CSPOT_SYSTEMCONFIGURATION_FRAMEWORK}
+      ${CSPOT_IOKIT_FRAMEWORK}
     )
   elseif (WIN32)
     target_link_libraries(${target} PRIVATE ole32 avrt uuid winmm)
