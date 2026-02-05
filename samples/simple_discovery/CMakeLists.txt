@@ -18,13 +18,13 @@ if (NOT TARGET librespot::cspot)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
-include(CspotAudio)
+include(CspotDependencies)
 
 add_executable(simple_discovery src/simple_discovery.c)
 if (TARGET cspot_prebuild)
   add_dependencies(simple_discovery cspot_prebuild)
 endif()
-target_link_libraries(simple_discovery PRIVATE librespot::cspot m ssl crypto)
-cspot_link_platform_audio(simple_discovery)
+target_link_libraries(simple_discovery PRIVATE librespot::cspot)
+cspot_link_dependencies(simple_discovery)
 
 install(TARGETS simple_discovery RUNTIME DESTINATION "${CSPOT_INSTALL_SAMPLES_DIR}")

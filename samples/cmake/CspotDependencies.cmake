@@ -1,5 +1,16 @@
 include_guard(GLOBAL)
 
+function(cspot_link_common_deps target)
+  if (NOT TARGET ${target})
+    message(FATAL_ERROR "cspot_link_common_deps: target '${target}' does not exist")
+  endif()
+
+  if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    find_package(OpenSSL REQUIRED)
+    target_link_libraries(${target} PRIVATE m OpenSSL::SSL OpenSSL::Crypto)
+  endif()
+endfunction()
+
 function(cspot_link_platform_audio target)
   if (NOT TARGET ${target})
     message(FATAL_ERROR "cspot_link_platform_audio: target '${target}' does not exist")
@@ -29,4 +40,13 @@ function(cspot_link_platform_audio target)
   elseif (WIN32)
     target_link_libraries(${target} PRIVATE ole32 avrt uuid winmm)
   endif()
+endfunction()
+
+function(cspot_link_dependencies target)
+  if (NOT TARGET ${target})
+    message(FATAL_ERROR "cspot_link_dependencies: target '${target}' does not exist")
+  endif()
+
+  cspot_link_common_deps(${target})
+  cspot_link_platform_audio(${target})
 endfunction()

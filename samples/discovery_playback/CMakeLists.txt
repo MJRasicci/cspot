@@ -18,13 +18,13 @@ if (NOT TARGET librespot::cspot)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
-include(CspotAudio)
+include(CspotDependencies)
 
 add_executable(discovery_playback src/discovery_playback.c)
 if (TARGET cspot_prebuild)
   add_dependencies(discovery_playback cspot_prebuild)
 endif()
-target_link_libraries(discovery_playback PRIVATE librespot::cspot m ssl crypto)
-cspot_link_platform_audio(discovery_playback)
+target_link_libraries(discovery_playback PRIVATE librespot::cspot)
+cspot_link_dependencies(discovery_playback)
 
 install(TARGETS discovery_playback RUNTIME DESTINATION "${CSPOT_INSTALL_SAMPLES_DIR}")
