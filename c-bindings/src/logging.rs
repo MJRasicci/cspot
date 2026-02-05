@@ -111,10 +111,6 @@ impl LogFilter {
             default: LevelFilter::Off,
             directives: vec![
                 TargetFilter {
-                    target: "libmdns".to_string(),
-                    level,
-                },
-                TargetFilter {
                     target: "librespot".to_string(),
                     level,
                 },
@@ -352,7 +348,7 @@ fn ensure_logger(out_error: *mut *mut cspot_error_t) -> bool {
 
 /// Initializes default logging configuration values.
 ///
-/// The defaults select INFO logging for librespot/libmdns and use no callback.
+/// The defaults select INFO logging for librespot and use no callback.
 #[unsafe(no_mangle)]
 pub extern "C" fn cspot_log_config_init(config: *mut cspot_log_config_t) {
     if config.is_null() {
