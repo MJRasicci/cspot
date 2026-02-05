@@ -156,7 +156,7 @@ install_cbindgen() {
   fi
 
   local version
-  version="${CSPOT_CBINDGEN_VERSION:-0.27.0}"
+  version="${CSPOT_CBINDGEN_VERSION:-0.29.2}"
   log "Installing cbindgen ${version}"
   cargo install cbindgen --version "${version}"
 }
