@@ -47,7 +47,7 @@ function Ensure-Cbindgen {
     throw "cargo not found; rustup installation may have failed"
   }
 
-  $version = if ($env:CSPOT_CBINDGEN_VERSION) { $env:CSPOT_CBINDGEN_VERSION } else { "0.27.0" }
+  $version = if ($env:CSPOT_CBINDGEN_VERSION) { $env:CSPOT_CBINDGEN_VERSION } else { "0.29.2" }
   Write-Log "Installing cbindgen $version"
   & cargo install cbindgen --version $version
 }
