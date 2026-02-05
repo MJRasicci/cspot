@@ -15,11 +15,11 @@ use crate::error::{clear_error, cspot_error_t, write_error};
 use crate::session::session_from_handle;
 
 /// Opaque mixer handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_mixer_t;
 
 /// Opaque player handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_player_t;
 
 struct MixerHandle {

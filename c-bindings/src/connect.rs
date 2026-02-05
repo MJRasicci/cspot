@@ -16,19 +16,19 @@ use crate::runtime::runtime;
 use crate::session::{session_from_handle, cspot_session_t};
 
 /// Opaque connect configuration handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_connect_config_t;
 
 /// Opaque load request options handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_load_request_options_t;
 
 /// Opaque spirc handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_spirc_t;
 
 /// Opaque spirc task handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_spirc_task_t;
 
 struct ConnectConfigHandle {

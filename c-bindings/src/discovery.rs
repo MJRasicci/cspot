@@ -17,11 +17,11 @@ use crate::ffi::read_cstr;
 use crate::runtime::runtime;
 
 /// Opaque discovery handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_discovery_t;
 
 /// Opaque credentials handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_credentials_t;
 
 /// Device types exposed to C callers.

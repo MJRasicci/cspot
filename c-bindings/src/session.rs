@@ -12,7 +12,7 @@ use crate::ffi::read_cstr;
 use crate::runtime::runtime;
 
 /// Opaque session handle for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_session_t;
 
 struct SessionHandle {

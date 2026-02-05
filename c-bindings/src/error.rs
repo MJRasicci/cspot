@@ -3,7 +3,7 @@ use std::os::raw::c_char;
 use std::ptr;
 
 /// Opaque error type for C callers.
-#[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct cspot_error_t;
 
 struct ErrorHandle {
