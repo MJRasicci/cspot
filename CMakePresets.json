@@ -80,6 +80,20 @@
             }
         },
         {
+            "name": "android-base",
+            "inherits": "generic-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "Android",
+                "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake",
+                "ANDROID_PLATFORM": "android-26",
+                "CSPOT_BUILD_NATIVE_SAMPLES": "OFF",
+                "CSPOT_CARGO_NO_DEFAULT_FEATURES": "ON",
+                "CSPOT_CARGO_FEATURES": "rodio-backend,with-libmdns,rustls-tls-webpki-roots",
+                "CPACK_PACKAGE_FILE_NAME": "cspot-${presetName}"
+            }
+        },
+        {
             "name": "x64-base",
             "hidden": true,
             "architecture": {
@@ -110,6 +124,14 @@
                 "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON"
             }
         },
+        {
+            "name": "android-meta-base",
+            "inherits": [ "generic-base", "release-base" ],
+            "hidden": true,
+            "cacheVariables": {
+                "CSPOT_BUILD_NATIVE_SAMPLES": "OFF"
+            }
+        },
         { "name": "windows-x64-debug",     "displayName": "Windows x64 Debug",     "inherits": [ "windows-base", "x64-base",   "debug-base"   ] },
         { "name": "windows-x64-release",   "displayName": "Windows x64 Release",   "inherits": [ "windows-base", "x64-base",   "release-base" ] },
         { "name": "windows-arm64-debug",   "displayName": "Windows ARM64 Debug",   "inherits": [ "windows-base", "arm64-base", "debug-base"   ] },
@@ -121,7 +143,84 @@
         { "name": "linux-x64-debug",       "displayName": "Linux x64 Debug",       "inherits": [ "linux-base",   "x64-base",   "debug-base"   ] },
         { "name": "linux-x64-release",     "displayName": "Linux x64 Release",     "inherits": [ "linux-base",   "x64-base",   "release-base" ] },
         { "name": "linux-arm64-debug",     "displayName": "Linux ARM64 Debug",     "inherits": [ "linux-base",   "arm64-base", "debug-base"   ] },
-        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "inherits": [ "linux-base",   "arm64-base", "release-base" ] }
+        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "inherits": [ "linux-base",   "arm64-base", "release-base" ] },
+        {
+            "name": "android-x86-debug",
+            "displayName": "Android x86 Debug",
+            "inherits": [ "android-base", "debug-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "x86",
+                "CSPOT_CARGO_TARGET_TRIPLE": "i686-linux-android"
+            }
+        },
+        {
+            "name": "android-x86-release",
+            "displayName": "Android x86 Release",
+            "inherits": [ "android-base", "release-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "x86",
+                "CSPOT_CARGO_TARGET_TRIPLE": "i686-linux-android"
+            }
+        },
+        {
+            "name": "android-x86_64-debug",
+            "displayName": "Android x86_64 Debug",
+            "inherits": [ "android-base", "debug-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "x86_64",
+                "CSPOT_CARGO_TARGET_TRIPLE": "x86_64-linux-android"
+            }
+        },
+        {
+            "name": "android-x86_64-release",
+            "displayName": "Android x86_64 Release",
+            "inherits": [ "android-base", "release-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "x86_64",
+                "CSPOT_CARGO_TARGET_TRIPLE": "x86_64-linux-android"
+            }
+        },
+        {
+            "name": "android-armeabi-v7a-debug",
+            "displayName": "Android armeabi-v7a Debug",
+            "inherits": [ "android-base", "debug-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "armeabi-v7a",
+                "CSPOT_CARGO_TARGET_TRIPLE": "armv7-linux-androideabi"
+            }
+        },
+        {
+            "name": "android-armeabi-v7a-release",
+            "displayName": "Android armeabi-v7a Release",
+            "inherits": [ "android-base", "release-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "armeabi-v7a",
+                "CSPOT_CARGO_TARGET_TRIPLE": "armv7-linux-androideabi"
+            }
+        },
+        {
+            "name": "android-arm64-v8a-debug",
+            "displayName": "Android arm64-v8a Debug",
+            "inherits": [ "android-base", "debug-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "arm64-v8a",
+                "CSPOT_CARGO_TARGET_TRIPLE": "aarch64-linux-android"
+            }
+        },
+        {
+            "name": "android-arm64-v8a-release",
+            "displayName": "Android arm64-v8a Release",
+            "inherits": [ "android-base", "release-base" ],
+            "cacheVariables": {
+                "ANDROID_ABI": "arm64-v8a",
+                "CSPOT_CARGO_TARGET_TRIPLE": "aarch64-linux-android"
+            }
+        },
+        {
+            "name": "android-all-release",
+            "displayName": "Android All ABIs Release (Consolidated)",
+            "inherits": [ "android-meta-base" ]
+        }
     ],
     "buildPresets": [
         { "name": "windows-x64-debug",     "displayName": "Windows x64 Debug",     "configurePreset": "windows-x64-debug"     },
@@ -135,7 +234,21 @@
         { "name": "linux-x64-debug",       "displayName": "Linux x64 Debug",       "configurePreset": "linux-x64-debug"       },
         { "name": "linux-x64-release",     "displayName": "Linux x64 Release",     "configurePreset": "linux-x64-release"     },
         { "name": "linux-arm64-debug",     "displayName": "Linux ARM64 Debug",     "configurePreset": "linux-arm64-debug"     },
-        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release"   }
+        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release"   },
+        { "name": "android-x86-debug",         "displayName": "Android x86 Debug",         "configurePreset": "android-x86-debug"         },
+        { "name": "android-x86-release",       "displayName": "Android x86 Release",       "configurePreset": "android-x86-release"       },
+        { "name": "android-x86_64-debug",      "displayName": "Android x86_64 Debug",      "configurePreset": "android-x86_64-debug"      },
+        { "name": "android-x86_64-release",    "displayName": "Android x86_64 Release",    "configurePreset": "android-x86_64-release"    },
+        { "name": "android-armeabi-v7a-debug", "displayName": "Android armeabi-v7a Debug", "configurePreset": "android-armeabi-v7a-debug" },
+        { "name": "android-armeabi-v7a-release", "displayName": "Android armeabi-v7a Release", "configurePreset": "android-armeabi-v7a-release" },
+        { "name": "android-arm64-v8a-debug",   "displayName": "Android arm64-v8a Debug",   "configurePreset": "android-arm64-v8a-debug"   },
+        { "name": "android-arm64-v8a-release", "displayName": "Android arm64-v8a Release", "configurePreset": "android-arm64-v8a-release" },
+        {
+            "name": "android-all-release",
+            "displayName": "Android All ABIs Release (Consolidated)",
+            "configurePreset": "android-all-release",
+            "targets": [ "android_package_all" ]
+        }
     ],
     "testPresets": [
         {
@@ -164,6 +277,11 @@
             "hidden": true,
             "inherits": "generic-base"
         },
+        {
+            "name": "android-base",
+            "hidden": true,
+            "inherits": "generic-base"
+        },
         { "name": "windows-x64-debug",     "displayName": "Windows x64 Debug",     "configurePreset": "windows-x64-debug",     "inherits": "windows-base" },
         { "name": "windows-x64-release",   "displayName": "Windows x64 Release",   "configurePreset": "windows-x64-release",   "inherits": "windows-base" },
         { "name": "windows-arm64-debug",   "displayName": "Windows ARM64 Debug",   "configurePreset": "windows-arm64-debug",   "inherits": "windows-base" },
@@ -175,7 +293,15 @@
         { "name": "linux-x64-debug",       "displayName": "Linux x64 Debug",       "configurePreset": "linux-x64-debug",       "inherits": "linux-base"   },
         { "name": "linux-x64-release",     "displayName": "Linux x64 Release",     "configurePreset": "linux-x64-release",     "inherits": "linux-base"   },
         { "name": "linux-arm64-debug",     "displayName": "Linux ARM64 Debug",     "configurePreset": "linux-arm64-debug",     "inherits": "linux-base"   },
-        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release",   "inherits": "linux-base"   }
+        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release",   "inherits": "linux-base"   },
+        { "name": "android-x86-debug",         "displayName": "Android x86 Debug",         "configurePreset": "android-x86-debug",         "inherits": "android-base" },
+        { "name": "android-x86-release",       "displayName": "Android x86 Release",       "configurePreset": "android-x86-release",       "inherits": "android-base" },
+        { "name": "android-x86_64-debug",      "displayName": "Android x86_64 Debug",      "configurePreset": "android-x86_64-debug",      "inherits": "android-base" },
+        { "name": "android-x86_64-release",    "displayName": "Android x86_64 Release",    "configurePreset": "android-x86_64-release",    "inherits": "android-base" },
+        { "name": "android-armeabi-v7a-debug", "displayName": "Android armeabi-v7a Debug", "configurePreset": "android-armeabi-v7a-debug", "inherits": "android-base" },
+        { "name": "android-armeabi-v7a-release", "displayName": "Android armeabi-v7a Release", "configurePreset": "android-armeabi-v7a-release", "inherits": "android-base" },
+        { "name": "android-arm64-v8a-debug",   "displayName": "Android arm64-v8a Debug",   "configurePreset": "android-arm64-v8a-debug",   "inherits": "android-base" },
+        { "name": "android-arm64-v8a-release", "displayName": "Android arm64-v8a Release", "configurePreset": "android-arm64-v8a-release", "inherits": "android-base" }
     ],
     "packagePresets": [
         {
@@ -202,12 +328,22 @@
             "inherits": "generic-base",
             "generators": [ "TGZ" ]
         },
+        {
+            "name": "android-base",
+            "hidden": true,
+            "inherits": "generic-base",
+            "generators": [ "TGZ" ]
+        },
         { "name": "windows-x64-release",   "displayName": "Windows x64 Release",   "configurePreset": "windows-x64-release",   "inherits": "windows-base" },
         { "name": "windows-arm64-release", "displayName": "Windows ARM64 Release", "configurePreset": "windows-arm64-release", "inherits": "windows-base" },
         { "name": "macos-x64-release",     "displayName": "macOS x64 Release",     "configurePreset": "macos-x64-release",     "inherits": "macos-base"   },
         { "name": "macos-arm64-release",   "displayName": "macOS ARM64 Release",   "configurePreset": "macos-arm64-release",   "inherits": "macos-base"   },
         { "name": "linux-x64-release",     "displayName": "Linux x64 Release",     "configurePreset": "linux-x64-release",     "inherits": "linux-base"   },
-        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release",   "inherits": "linux-base"   }
+        { "name": "linux-arm64-release",   "displayName": "Linux ARM64 Release",   "configurePreset": "linux-arm64-release",   "inherits": "linux-base"   },
+        { "name": "android-x86-release",       "displayName": "Android x86 Release",       "configurePreset": "android-x86-release",       "inherits": "android-base", "packageName": "cspot-android-x86" },
+        { "name": "android-x86_64-release",    "displayName": "Android x86_64 Release",    "configurePreset": "android-x86_64-release",    "inherits": "android-base", "packageName": "cspot-android-x86_64" },
+        { "name": "android-armeabi-v7a-release", "displayName": "Android armeabi-v7a Release", "configurePreset": "android-armeabi-v7a-release", "inherits": "android-base", "packageName": "cspot-android-armeabi-v7a" },
+        { "name": "android-arm64-v8a-release", "displayName": "Android arm64-v8a Release", "configurePreset": "android-arm64-v8a-release", "inherits": "android-base", "packageName": "cspot-android-arm64-v8a" }
     ],
     "workflowPresets": [
         {
@@ -310,6 +446,82 @@
                 { "type": "configure",  "name": "linux-arm64-release" },
                 { "type": "build",      "name": "linux-arm64-release" },
                 { "type": "package",    "name": "linux-arm64-release" }
+            ]
+        },
+        {
+            "name": "android-x86-debug",
+            "displayName": "Android x86 Debug",
+            "steps": [
+                { "type": "configure",  "name": "android-x86-debug" },
+                { "type": "build",      "name": "android-x86-debug" }
+            ]
+        },
+        {
+            "name": "android-x86-release",
+            "displayName": "Android x86 Release",
+            "steps": [
+                { "type": "configure",  "name": "android-x86-release" },
+                { "type": "build",      "name": "android-x86-release" },
+                { "type": "package",    "name": "android-x86-release" }
+            ]
+        },
+        {
+            "name": "android-x86_64-debug",
+            "displayName": "Android x86_64 Debug",
+            "steps": [
+                { "type": "configure",  "name": "android-x86_64-debug" },
+                { "type": "build",      "name": "android-x86_64-debug" }
+            ]
+        },
+        {
+            "name": "android-x86_64-release",
+            "displayName": "Android x86_64 Release",
+            "steps": [
+                { "type": "configure",  "name": "android-x86_64-release" },
+                { "type": "build",      "name": "android-x86_64-release" },
+                { "type": "package",    "name": "android-x86_64-release" }
+            ]
+        },
+        {
+            "name": "android-armeabi-v7a-debug",
+            "displayName": "Android armeabi-v7a Debug",
+            "steps": [
+                { "type": "configure",  "name": "android-armeabi-v7a-debug" },
+                { "type": "build",      "name": "android-armeabi-v7a-debug" }
+            ]
+        },
+        {
+            "name": "android-armeabi-v7a-release",
+            "displayName": "Android armeabi-v7a Release",
+            "steps": [
+                { "type": "configure",  "name": "android-armeabi-v7a-release" },
+                { "type": "build",      "name": "android-armeabi-v7a-release" },
+                { "type": "package",    "name": "android-armeabi-v7a-release" }
+            ]
+        },
+        {
+            "name": "android-arm64-v8a-debug",
+            "displayName": "Android arm64-v8a Debug",
+            "steps": [
+                { "type": "configure",  "name": "android-arm64-v8a-debug" },
+                { "type": "build",      "name": "android-arm64-v8a-debug" }
+            ]
+        },
+        {
+            "name": "android-arm64-v8a-release",
+            "displayName": "Android arm64-v8a Release",
+            "steps": [
+                { "type": "configure",  "name": "android-arm64-v8a-release" },
+                { "type": "build",      "name": "android-arm64-v8a-release" },
+                { "type": "package",    "name": "android-arm64-v8a-release" }
+            ]
+        },
+        {
+            "name": "android-all-release",
+            "displayName": "Android All ABIs Release (Consolidated)",
+            "steps": [
+                { "type": "configure",  "name": "android-all-release" },
+                { "type": "build",      "name": "android-all-release" }
             ]
         }
     ]

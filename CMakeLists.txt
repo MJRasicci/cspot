@@ -7,9 +7,24 @@ set(CSPOT_INSTALL_INCLUDE_DIR "include")
 set(CSPOT_INSTALL_LIB_DIR "lib")
 set(CSPOT_INSTALL_SAMPLES_DIR "samples")
 
+if (ANDROID)
+  option(CSPOT_BUILD_NATIVE_SAMPLES "Build native C sample executables" OFF)
+else()
+  option(CSPOT_BUILD_NATIVE_SAMPLES "Build native C sample executables" ON)
+endif()
+
 set(CSPOT_CARGO_TARGET_DIR "${CMAKE_CURRENT_LIST_DIR}/artifacts/target")
 add_subdirectory(c-bindings)
-add_subdirectory(samples/simple_discovery)
-add_subdirectory(samples/discovery_playback)
+if (CSPOT_BUILD_NATIVE_SAMPLES)
+  add_subdirectory(samples/simple_discovery)
+  add_subdirectory(samples/discovery_playback)
+endif()
+
+add_custom_target(android_package_all
+  COMMAND "${CMAKE_CURRENT_LIST_DIR}/scripts/package-android-all.sh"
+  WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+  COMMENT "Building all Android ABIs and producing a consolidated package"
+  USES_TERMINAL
+)
 
 include(CPack)

@@ -62,8 +62,8 @@ git submodule update --init --recursive
 
 Presets follow a `{platform}-{architecture}-{configuration}` convention (for example `linux-x64-debug` or `windows-arm64-release`). Each platform preset inherits shared base settings so you can mix and match:
 
-- **Platform:** `windows`, `macos`, `linux`
-- **Architecture:** `x64`, `arm64`
+- **Platform:** `windows`, `macos`, `linux`, `android`
+- **Architecture:** desktop presets use `x64`/`arm64`; Android presets use `x86`, `x86_64`, `armeabi-v7a`, `arm64-v8a`
 - **Configuration:** `debug`, `release`
 
 Configure with your preferred preset:
@@ -102,6 +102,8 @@ Packages contain:
 - `lib/`: static library artifacts
 - `samples/`: sample executables
 
+Android package presets place libraries under `lib/<abi>/`.
+
 ### Workflow shortcuts
 
 Workflow presets chain multiple steps together. Debug workflows run **configure → build → test**. Release workflows add **package**:
@@ -109,7 +111,30 @@ Workflow presets chain multiple steps together. Debug workflows run **configure 
 ```sh
 cmake --workflow --preset linux-x64-debug     # configure + build + test
 cmake --workflow --preset linux-x64-release   # configure + build + test + package
+cmake --workflow --preset android-arm64-v8a-release
 ```
+
+Run all Android ABI workflows individually:
+
+```sh
+cmake --workflow --preset android-x86-release
+cmake --workflow --preset android-x86_64-release
+cmake --workflow --preset android-armeabi-v7a-release
+cmake --workflow --preset android-arm64-v8a-release
+```
+
+Build and package all Android ABIs into one consolidated archive:
+
+```sh
+cmake --workflow --preset android-all-release
+```
+
+This produces `artifacts/pack/cspot-android-all-release.tar.gz` with:
+- `include/cspot.h`
+- `lib/x86/libcspot.{so,a}`
+- `lib/x86_64/libcspot.{so,a}`
+- `lib/armeabi-v7a/libcspot.{so,a}`
+- `lib/arm64-v8a/libcspot.{so,a}`
 
 ### Install to a prefix
 
