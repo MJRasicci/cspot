@@ -9,8 +9,10 @@ set(CSPOT_INSTALL_SAMPLES_DIR "samples")
 
 if (ANDROID)
   option(CSPOT_BUILD_NATIVE_SAMPLES "Build native C sample executables" OFF)
+  option(CSPOT_BUILD_ANDROID_CLIENT "Build the Android sample application" ON)
 else()
   option(CSPOT_BUILD_NATIVE_SAMPLES "Build native C sample executables" ON)
+  option(CSPOT_BUILD_ANDROID_CLIENT "Build the Android sample application" OFF)
 endif()
 
 set(CSPOT_CARGO_TARGET_DIR "${CMAKE_CURRENT_LIST_DIR}/artifacts/target")
@@ -19,6 +21,9 @@ if (CSPOT_BUILD_NATIVE_SAMPLES)
   add_subdirectory(samples/simple_discovery)
   add_subdirectory(samples/discovery_playback)
   add_subdirectory(samples/repl_app)
+endif()
+if (CSPOT_BUILD_ANDROID_CLIENT)
+  add_subdirectory(samples/android-client)
 endif()
 
 add_custom_target(android_package_all

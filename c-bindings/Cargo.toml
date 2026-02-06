@@ -42,5 +42,8 @@ once_cell = "1"
 # Pin vergen to avoid pulling in 9.1+ which conflicts with vergen-lib 0.1.x used by vergen-gitcl.
 vergen = "=9.0.6"
 
+[target.'cfg(target_os = "android")'.dependencies]
+ndk-context = "0.1.1"
+
 [dev-dependencies]
 cbindgen = "0.27"

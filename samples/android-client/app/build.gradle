@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.application'
+}
+
+configurations.configureEach {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+}
+
+def cspotAbi = providers.gradleProperty('cspotAbi').orNull
+if (!cspotAbi) {
+    throw new GradleException('Missing required Gradle property: -PcspotAbi=<abi>')
+}
+
+def cspotLibDir = providers.gradleProperty('cspotLibDir').orNull
+if (!cspotLibDir) {
+    throw new GradleException('Missing required Gradle property: -PcspotLibDir=<path>')
+}
+
+def cspotIncludeDir = providers.gradleProperty('cspotIncludeDir').orNull
+if (!cspotIncludeDir) {
+    throw new GradleException('Missing required Gradle property: -PcspotIncludeDir=<path>')
+}
+
+def artifactsAppDir = rootProject.layout.projectDirectory.dir("../../artifacts/android-client/gradle/${cspotAbi}/app")
+layout.buildDirectory.set(artifactsAppDir.dir("build"))
+
+def stagedJniRootPath = layout.buildDirectory.dir("generated/cspot-jni-libs").get().asFile.absolutePath
+def stagedJniAbiPath = "${stagedJniRootPath}/${cspotAbi}"
+
+def stageCspotNativeLib = tasks.register('stageCspotNativeLib', Copy) {
+    from(file("${cspotLibDir}/libcspot.so"))
+    into(file(stagedJniAbiPath))
+
+    doFirst {
+        File nativeLib = file("${cspotLibDir}/libcspot.so")
+        if (!nativeLib.exists()) {
+            throw new GradleException("Missing libcspot.so at ${nativeLib.absolutePath}")
+        }
+        File includeDir = file(cspotIncludeDir)
+        if (!includeDir.exists()) {
+            throw new GradleException("Missing cspot include dir at ${includeDir.absolutePath}")
+        }
+    }
+}
+
+tasks.configureEach { task ->
+    if (task.name == 'preBuild' || task.name.startsWith('configureCMake') || task.name.startsWith('buildCMake')) {
+        task.dependsOn(stageCspotNativeLib)
+    }
+}
+
+android {
+    namespace 'io.cspot.androidclient'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'io.cspot.androidclient'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+
+        ndk {
+            abiFilters cspotAbi
+        }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags '-std=c++17', '-Wall', '-Wextra'
+                arguments "-DCSPOT_HEADER_DIR=${cspotIncludeDir}", "-DCSPOT_LIB_DIR=${stagedJniAbiPath}"
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = [stagedJniRootPath]
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+            buildStagingDirectory = artifactsAppDir.dir(".cxx").asFile
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+}

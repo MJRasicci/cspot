@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">cspot Android Client</string>
+    <string name="status_starting">Starting cspot Android client...</string>
+    <string name="status_waiting">Waiting for Spotify Connect authorization</string>
+    <string name="label_transport">Transport</string>
+    <string name="label_track_position">Track Position</string>
+    <string name="label_volume">Volume</string>
+    <string name="button_prev">Prev</string>
+    <string name="button_play">Play</string>
+    <string name="button_pause">Pause</string>
+    <string name="button_next">Next</string>
+    <string name="button_transfer">Transfer To This Device</string>
+    <string name="track_unknown">No track</string>
+    <string name="artist_unknown">Unknown artist</string>
+    <string name="album_unknown">Unknown album</string>
+    <string name="artwork_content_description">Album artwork</string>
+</resources>

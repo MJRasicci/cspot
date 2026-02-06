@@ -1,5 +1,6 @@
 //! C FFI entry points for cspot.
 
+mod android;
 mod discovery;
 mod error;
 mod ffi;

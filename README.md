@@ -12,7 +12,7 @@ librespot is included as a git submodule.
 ## What’s in this repo
 
 - `c-bindings/`: the Rust crate that exports the C ABI, plus cbindgen config for `cspot.h`.
-- `samples/`: C examples that link against the cspot library.
+- `samples/`: C examples that link against the cspot library, plus an Android app sample.
 - `artifacts/`: build outputs (configured by CMake presets).
 - `scripts/setup/`: OS-specific setup scripts for containers, workstations, and CI agents.
 
@@ -79,6 +79,7 @@ cmake --build --preset linux-x64-debug
 ```
 
 Android builds require `ANDROID_NDK_HOME` in the environment (set by `./scripts/setup.sh --android` in the current shell).
+When Android presets build `samples/android-client`, the Gradle distribution is downloaded on-demand into `artifacts/tools/` if it is not already present.
 
 ### Running tests
 
@@ -103,6 +104,7 @@ Packages contain:
 - `samples/`: sample executables
 
 Android package presets place libraries under `lib/<abi>/`.
+Android builds also include the `samples/android-client` app source and per-ABI APK outputs.
 
 ### Workflow shortcuts
 
@@ -135,6 +137,8 @@ This produces `artifacts/pack/cspot-android-all-release.tar.gz` with:
 - `lib/x86_64/libcspot.{so,a}`
 - `lib/armeabi-v7a/libcspot.{so,a}`
 - `lib/arm64-v8a/libcspot.{so,a}`
+- `samples/android-client/source/` (Gradle + JNI sample project)
+- `samples/android-client/apk/<abi>/android-client-<abi>-release.apk`
 
 ### Install to a prefix
 
