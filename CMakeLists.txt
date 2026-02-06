@@ -18,6 +18,7 @@ add_subdirectory(c-bindings)
 if (CSPOT_BUILD_NATIVE_SAMPLES)
   add_subdirectory(samples/simple_discovery)
   add_subdirectory(samples/discovery_playback)
+  add_subdirectory(samples/repl_app)
 endif()
 
 add_custom_target(android_package_all
