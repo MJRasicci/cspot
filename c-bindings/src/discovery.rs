@@ -114,6 +114,7 @@ pub enum cspot_discovery_next_result_t {
 
 struct DiscoveryHandle {
     discovery: Discovery,
+    running: bool,
 }
 
 struct CredentialsHandle {
@@ -123,10 +124,7 @@ struct CredentialsHandle {
 
 impl CredentialsHandle {
     fn new(credentials: Credentials) -> Self {
-        let username = credentials
-            .username
-            .as_deref()
-            .map(cstring_from_str_lossy);
+        let username = credentials.username.as_deref().map(cstring_from_str_lossy);
         Self {
             credentials,
             username,
@@ -207,8 +205,10 @@ pub extern "C" fn cspot_discovery_create(
     }));
 
     match result {
-        Ok(Ok(discovery)) => Box::into_raw(Box::new(DiscoveryHandle { discovery }))
-            as *mut cspot_discovery_t,
+        Ok(Ok(discovery)) => Box::into_raw(Box::new(DiscoveryHandle {
+            discovery,
+            running: true,
+        })) as *mut cspot_discovery_t,
         Ok(Err(err)) => {
             write_error(out_error, err.to_string());
             ptr::null_mut()
@@ -260,12 +260,26 @@ pub extern "C" fn cspot_discovery_next(
             }
             cspot_discovery_next_result_t::CSPOT_DISCOVERY_NEXT_CREDENTIALS
         }
-        Ok(None) => cspot_discovery_next_result_t::CSPOT_DISCOVERY_NEXT_END,
+        Ok(None) => {
+            handle.running = false;
+            cspot_discovery_next_result_t::CSPOT_DISCOVERY_NEXT_END
+        }
         Err(_) => {
             write_error(out_error, "panic while waiting for discovery credentials");
             cspot_discovery_next_result_t::CSPOT_DISCOVERY_NEXT_ERROR
         }
     }
+}
+
+/// Returns whether the discovery service is currently running.
+#[unsafe(no_mangle)]
+pub extern "C" fn cspot_discovery_is_running(discovery: *const cspot_discovery_t) -> bool {
+    if discovery.is_null() {
+        return false;
+    }
+    // Safety: discovery must be a valid handle allocated by cspot.
+    let handle = unsafe { &*(discovery as *const DiscoveryHandle) };
+    handle.running
 }
 
 /// Shuts down discovery and releases associated resources.
