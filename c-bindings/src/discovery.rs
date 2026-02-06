@@ -82,7 +82,7 @@ pub enum cspot_auth_type_t {
     CSPOT_AUTH_TYPE_STORED_FACEBOOK_CREDENTIALS = 2,
     CSPOT_AUTH_TYPE_SPOTIFY_TOKEN = 3,
     CSPOT_AUTH_TYPE_FACEBOOK_TOKEN = 4,
-    CSPOT_AUTH_TYPE_INVALID = 0xFFFF_FFFF,
+    CSPOT_AUTH_TYPE_INVALID = -1,
 }
 
 impl From<AuthenticationType> for cspot_auth_type_t {
