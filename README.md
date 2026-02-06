@@ -34,6 +34,12 @@ Windows:
 
 The scripts install Rust (via rustup), cbindgen, CMake, Ninja, and a compiler toolchain. On Linux they also install minimal librespot native deps (OpenSSL + ALSA for the rodio backend). See `scripts/setup/README.md` for details.
 
+To bootstrap Android toolchains (SDK command-line tools, NDK, and Rust Android targets), add `--android`:
+
+```sh
+./scripts/setup.sh --android
+```
+
 ## Build from Source
 
 cspot ships an extensive `CMakePresets.json` that encapsulates the common configure, build, test, and package workflows. Presets stage outputs in `artifacts/` so libraries, headers, and sample binaries stay organized.
@@ -71,6 +77,8 @@ Build targets for the active preset:
 ```sh
 cmake --build --preset linux-x64-debug
 ```
+
+Android builds require `ANDROID_NDK_HOME` in the environment (set by `./scripts/setup.sh --android` in the current shell).
 
 ### Running tests
 
