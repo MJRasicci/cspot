@@ -126,8 +126,28 @@ GRADLE_USER_HOME="${GRADLE_HOME}" "${GRADLE_BIN}" \
   "-PcspotIncludeDir=${CSPOT_INCLUDE_DIR}" \
   ":app:${TASK}"
 
-APK_SOURCE="${REPO_ROOT}/artifacts/android-client/gradle/${ABI}/app/build/outputs/apk/${VARIANT}/app-${VARIANT}.apk"
-[ -f "${APK_SOURCE}" ] || die "expected APK missing: ${APK_SOURCE}"
+APK_OUTPUT_DIR="${REPO_ROOT}/artifacts/android-client/gradle/${ABI}/app/build/outputs/apk/${VARIANT}"
+APK_METADATA="${APK_OUTPUT_DIR}/output-metadata.json"
+APK_SOURCE=""
+
+if [ -f "${APK_METADATA}" ]; then
+  APK_FILE_NAME="$(sed -n 's/.*"outputFile"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "${APK_METADATA}" | head -n 1)"
+  if [ -n "${APK_FILE_NAME}" ]; then
+    APK_SOURCE="${APK_OUTPUT_DIR}/${APK_FILE_NAME}"
+  fi
+fi
+
+if [ -z "${APK_SOURCE}" ] || [ ! -f "${APK_SOURCE}" ]; then
+  for candidate in "app-${VARIANT}.apk" "app-${VARIANT}-unsigned.apk"; do
+    if [ -f "${APK_OUTPUT_DIR}/${candidate}" ]; then
+      APK_SOURCE="${APK_OUTPUT_DIR}/${candidate}"
+      break
+    fi
+  done
+fi
+
+[ -n "${APK_SOURCE}" ] && [ -f "${APK_SOURCE}" ] || die "expected APK missing in ${APK_OUTPUT_DIR}"
+log "Using APK ${APK_SOURCE}"
 
 mkdir -p "$(dirname "${OUTPUT_APK}")"
 cp "${APK_SOURCE}" "${OUTPUT_APK}"

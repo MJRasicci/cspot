@@ -320,7 +320,7 @@
             "name": "macos-base",
             "hidden": true,
             "inherits": "generic-base",
-            "generators": [ "DragNDrop" ]
+            "generators": [ "TGZ" ]
         },
         {
             "name": "linux-base",
@@ -332,7 +332,7 @@
             "name": "android-base",
             "hidden": true,
             "inherits": "generic-base",
-            "generators": [ "TGZ" ]
+            "generators": [ "TGZ", "ZIP" ]
         },
         { "name": "windows-x64-release",   "displayName": "Windows x64 Release",   "configurePreset": "windows-x64-release",   "inherits": "windows-base" },
         { "name": "windows-arm64-release", "displayName": "Windows ARM64 Release", "configurePreset": "windows-arm64-release", "inherits": "windows-base" },

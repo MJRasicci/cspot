@@ -186,7 +186,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cspot-${{ matrix.artifact }}
-          path: artifacts/pack/*
+          path: artifacts/pack/cspot-*
           if-no-files-found: error
 
   android-package:
