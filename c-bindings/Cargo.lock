@@ -490,7 +490,7 @@ dependencies = [
 
 [[package]]
 name = "cspot"
-version = "0.0.1"
+version = "1.0.0"
 dependencies = [
  "cbindgen",
  "data-encoding",

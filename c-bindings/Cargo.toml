@@ -1,6 +1,6 @@
 [package]
 name = "cspot"
-version = "0.0.1"
+version = "1.0.0"
 edition = "2024"
 license = "MIT"
 description = "C bindings for librespot (cspot)"
